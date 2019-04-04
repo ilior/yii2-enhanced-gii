@@ -42,9 +42,6 @@ use yii\filters\AccessControl;
 <?php if(isset($relations)): ?>
 use yii\data\ArrayDataProvider;
 <?php endif; ?>
-<?php if($generator->hasFile($generator->tableSchema)):?>
-use yii\web\UploadedFile;
-<?php endif; ?>
 use inquid\google_debugger\GoogleCloudLogger;
 use dominus77\sweetalert2\Alert;
 use PhpOffice\PhpSpreadsheet\IOFactory;

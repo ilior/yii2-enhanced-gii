@@ -39,12 +39,12 @@ $this->registerJs($search);
 <?php endif; ?>
 
     <p>
-        <?= "<?= " ?>Html::a(<?= $generator->generateString('Agregar ' . Inflector::camel2words($baseModelClass)) ?>, ['create'], ['class' => 'btn btn-success']) ?>
+        <?= "<?= " ?>Html::a(<?= $generator->generateString('Создать ' . Inflector::camel2words($baseModelClass)) ?>, ['create'], ['class' => 'btn btn-success']) ?>
 <?php if (!empty($generator->searchModelClass)): ?>
-        <?= "<?= " ?>Html::a(<?= $generator->generateString('Busqueda Avanzada')?>, '#', ['class' => 'btn btn-info search-button']) ?>
+        <?= "<?= " ?>Html::a(<?= $generator->generateString('Расширенный поиск')?>, '#', ['class' => 'btn btn-info search-button']) ?>
 <?php endif; ?>
 <?php if (!empty($generator->importExcel)): ?>
-        <?= "<?= " ?>Html::a(<?= $generator->generateString('Importar desde Excel ') ?>, ['import'], ['class' => 'btn btn-danger']) ?>
+        <?= "<?= " ?>Html::a(<?= $generator->generateString('Импорт из Excel ') ?>, ['import'], ['class' => 'btn btn-danger']) ?>
 <?php endif; ?>
     </p>
 <?php if (!empty($generator->searchModelClass)): ?>
@@ -134,7 +134,7 @@ if ($generator->indexWidgetType === 'grid'):
                     'label' => 'Full',
                     'class' => 'btn btn-default',
                     'itemsBefore' => [
-                        '<li class="dropdown-header">Exportar Información</li>',
+                        '<li class="dropdown-header">Экспорт</li>',
                     ],
                 ],
 <?php if(!$generator->pdf):?>

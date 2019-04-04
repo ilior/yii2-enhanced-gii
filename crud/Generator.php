@@ -314,7 +314,7 @@ class Generator extends \inquid\enhancedgii\BaseGenerator
         $tableUtils = new TableUtils();
         $tableUtils->dbConnection = $db;
 
-        if (isset($this->moduleName)) {
+        if (isset($this->moduleName) && $this->moduleName != '') {
             $this->nsModel = "app\modules\\$this->moduleName\models";
             $this->nsSearchModel = "app\modules\\$this->moduleName\models\search";
             $this->queryNs = "app\modules\\$this->moduleName\models\ActiveQuery";
@@ -527,7 +527,7 @@ class Generator extends \inquid\enhancedgii\BaseGenerator
      */
     public function getViewPath()
     {
-        if (isset($this->moduleName)) {
+        if (isset($this->moduleName) && $this->moduleName) {
             return Yii::getAlias("@app/modules/{$this->moduleName}/views/" . $this->getControllerID());
         }
         if (empty($this->viewPath)) {
@@ -910,6 +910,8 @@ class Generator extends \inquid\enhancedgii\BaseGenerator
         $column = $tableSchema->columns[$attribute];
         if ($column->phpType === 'boolean' || $column->dbType === 'tinyint(1)') {
             return "\$form->field($model, '$attribute')->checkbox()";
+        } elseif ($column->autoIncrement) {
+            return "\$form->field($model, '$attribute', ['template' => '{input}'])->hiddenInput()";
         } elseif ($column->type === 'text' || $column->dbType === 'tinytext') {
             return "\$form->field($model, '$attribute')->widget(\yii\\redactor\\widgets\\Redactor::className());";
         } elseif ($column->dbType === 'date') {
@@ -1238,6 +1240,7 @@ class Generator extends \inquid\enhancedgii\BaseGenerator
         if (substr($column->comment, 0, 1) !== "@")
             return false;
         return substr($column->comment, 0, strlen($annotation)) === $annotation;
+		//return preg_match('/(^| )'.$annotation.'( |$)/',$column->comment);
     }
 
     /**

@@ -345,7 +345,7 @@ class Generator extends BaseGenerator
         $relations = $this->generateRelations();
         $db = $this->getDbConnection();
 
-        if (isset($this->moduleName)) {
+        if (isset($this->moduleName) && $this->moduleName) {
             $moduleGenerator = new \inquid\enhancedgii\module\Generator();
             $moduleGenerator->moduleClass = "app\modules\\$this->moduleName\Module";
             $moduleGenerator->moduleID = $this->moduleName;

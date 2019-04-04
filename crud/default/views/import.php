@@ -10,7 +10,7 @@ echo "
 use dominus77\sweetalert2\Alert;";
 
 echo "/* @var \$this \yii\web\View */
-\$this->title = 'Importar'; ?>"
+\$this->title = 'Импорт'; ?>"
 ?>
 <?= "<?= Alert::widget(['useSessionFlash' => true]); ?>" ?>
 <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-create">
@@ -21,14 +21,14 @@ echo "/* @var \$this \yii\web\View */
         <div class="box-body">
             <div class="row">
                 <div class="col-sm-4">
-                    <h1>Formatos</h1>
+                    <h1>Форматы</h1>
                     <ul>
-                        <li><?= "<?=  \yii\helpers\Html::a('Formato para Importar', ['get-format?format=true']) ?> "?></li>
-                        <li><?= "<?= \yii\helpers\Html::a('Formato para Actualizar', ['get-format']) ?> "?></li>
+                        <li><?= "<?=  \yii\helpers\Html::a('Формат для импорта', ['get-format?format=true']) ?> "?></li>
+                        <li><?= "<?= \yii\helpers\Html::a('Формат для обновления', ['get-format']) ?> "?></li>
                     </ul>
                 </div>
                 <div class="col-sm-4">
-                    <h1>Validar Formato</h1>
+                    <h1>Подтвердить формат</h1>
                     <?= "<?= \kartik\\file\FileInput::widget([
                         'name' => 'fileExcelTest',
                         'id' => 'fileExcelTest',
@@ -48,7 +48,7 @@ echo "/* @var \$this \yii\web\View */
                     ]); ?>"?>
                 </div>
                 <div class="col-sm-4">
-                    <h1>Importar Formato</h1>
+                    <h1>Формат импорта</h1>
                     <?= "<?= \kartik\\file\FileInput::widget([
                         'name' => 'fileExcel',
                         'id' => 'fileExcel',
