@@ -1,9 +1,9 @@
 <?php
 
-namespace inquid\enhancedgii\crud;
+namespace ilior\enhancedgii\crud;
 
-use inquid\enhancedgii\docgen\DocumentationGenerator;
-use inquid\enhancedgii\utils\TableUtils;
+use ilior\enhancedgii\docgen\DocumentationGenerator;
+use ilior\enhancedgii\utils\TableUtils;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\db\ColumnSchema;
@@ -22,7 +22,7 @@ use yii\web\Controller;
  * @author Yohanes Candrajaya <moo.tensai@gmail.com>
  * @since 2.0
  */
-class Generator extends \inquid\enhancedgii\BaseGenerator
+class Generator extends \ilior\enhancedgii\BaseGenerator
 {
 
     public $nameAttribute = 'name, title, username, nombre';

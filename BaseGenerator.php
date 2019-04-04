@@ -6,7 +6,7 @@
  * Time: 3:56 PM
  */
 
-namespace inquid\enhancedgii;
+namespace ilior\enhancedgii;
 
 use Yii;
 use yii\base\NotSupportedException;

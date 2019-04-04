@@ -7,7 +7,7 @@ use yii\helpers\StringHelper;
 use inquid\yiireports\ExcelHelper;
 
 /* @var $this yii\web\View */
-/* @var $generator \inquid\enhancedgii\crud\Generator */
+/* @var $generator \ilior\enhancedgii\crud\Generator */
 
 $controllerClass = StringHelper::basename($generator->controllerClass);
 $modelClass = StringHelper::basename($generator->modelClass);

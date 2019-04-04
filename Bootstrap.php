@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-namespace inquid\enhancedgii;
+namespace ilior\enhancedgii;
 
 use yii\base\Application;
 use yii\base\BootstrapInterface;
@@ -31,15 +31,15 @@ class Bootstrap implements BootstrapInterface
 //        \Yii::setAlias('@mtengii','@vendor/mootensai/yii2-enhanced-gii');
         if ($app->hasModule('gii')) {
             if (!isset($app->getModule('gii')->generators['enhanced-gii'])) {
-                $app->getModule('gii')->generators['enhanced-gii-model'] = 'inquid\enhancedgii\model\Generator';
-                $app->getModule('gii')->generators['enhanced-gii-crud']['class'] = 'inquid\enhancedgii\crud\Generator';
-                $app->getModule('gii')->generators['enhanced-gii-app'] = 'inquid\enhancedgii\app_template\Generator';
-                $app->getModule('gii')->generators['enhanced-gii-module'] = 'inquid\enhancedgii\module\Generator';
+                $app->getModule('gii')->generators['enhanced-gii-model'] = 'ilior\enhancedgii\model\Generator';
+                $app->getModule('gii')->generators['enhanced-gii-crud']['class'] = 'ilior\enhancedgii\crud\Generator';
+                $app->getModule('gii')->generators['enhanced-gii-app'] = 'ilior\enhancedgii\app_template\Generator';
+                $app->getModule('gii')->generators['enhanced-gii-module'] = 'ilior\enhancedgii\module\Generator';
 //                $app->getModule('gii')->generators['enhanced-gii-crud']['templates'] = [
 //                    'default' => '@mtengii/crud/default',
 //                    'nested' => '@mtengii/crud/nested'
 //                ];
-                $app->getModule('gii')->generators['enhanced-gii-migration'] = 'inquid\enhancedgii\migration\Generator';
+                $app->getModule('gii')->generators['enhanced-gii-migration'] = 'ilior\enhancedgii\migration\Generator';
             }
         }
     }
