@@ -2,7 +2,6 @@
 Yii2 Gii (generator) with Relation
 
 [![Yii2](https://img.shields.io/badge/Powered_by-Yii_Framework-green.svg?style=flat)](http://www.yiiframework.com/)
-[![Buy me a Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/inquid)
 
 ## Installation
 
@@ -11,13 +10,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```bash
-composer require inquid/yii2-enhanced-gii:dev-master
+composer require ilior/yii2-enhanced-gii:dev-master
 ```
 
 or add
 
 ```
-"inquid/yii2-enhanced-gii": "dev-master",
+"ilior/yii2-enhanced-gii": "dev-master",
 ```
 
 to the `require` section of your `composer.json` file.
@@ -78,7 +77,7 @@ Go to your gii tools, and notice the new IO Generator for models & CRUD
 ## Console Commands
 1. Configure your console application to use the namespace:
           ```php
-          'controllerNamespace' => '@vendor\inquid\yii2-enhanced-gii\console',
+          'controllerNamespace' => '@vendor\ilior\yii2-enhanced-gii\console',
           ```
 2. Use 
           ```
@@ -100,3 +99,4 @@ I'm open for any improvement
 3. kartik-v (https://github.com/kartik-v) for most of widgets
 4. schmunk42 (https://github.com/schmunk42) for bootstrap & model base & extension
 5. mdmunir (https://github.com/mdmunir) for JsBlock & Migration Generator (from https://github.com/deesoft/yii2-gii)
+6. inquid (https://github.com/inquid/yii2-enhanced-gii) for image and file fields and other improvements
