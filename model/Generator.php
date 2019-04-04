@@ -6,9 +6,9 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace inquid\enhancedgii\model;
+namespace ilior\enhancedgii\model;
 
-use inquid\enhancedgii\BaseGenerator;
+use ilior\enhancedgii\BaseGenerator;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\db\ActiveQuery;
@@ -346,7 +346,7 @@ class Generator extends BaseGenerator
         $db = $this->getDbConnection();
 
         if (isset($this->moduleName) && $this->moduleName) {
-            $moduleGenerator = new \inquid\enhancedgii\module\Generator();
+            $moduleGenerator = new \ilior\enhancedgii\module\Generator();
             $moduleGenerator->moduleClass = "app\modules\\$this->moduleName\Module";
             $moduleGenerator->moduleID = $this->moduleName;
             $moduleGenerator->generate();

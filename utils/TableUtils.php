@@ -6,7 +6,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace inquid\enhancedgii\utils;
+namespace ilior\enhancedgii\utils;
 
 use Yii;
 use yii\base\UserException;

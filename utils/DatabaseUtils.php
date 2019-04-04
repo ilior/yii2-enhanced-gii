@@ -6,7 +6,7 @@
  * Time: 11:30 AM
  */
 
-namespace inquid\enhancedgii\utils;
+namespace ilior\enhancedgii\utils;
 
 
 class DatabaseUtils

@@ -5,13 +5,13 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace inquid\enhancedgii\module;
+namespace ilior\enhancedgii\module;
 
 use yii\gii\CodeFile;
 use yii\helpers\Html;
 use Yii;
 use yii\helpers\StringHelper;
-use inquid\enhancedgii\BaseGenerator;
+use ilior\enhancedgii\BaseGenerator;
 
 /**
  * This generator will generate the skeleton code needed by a module.

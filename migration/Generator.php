@@ -1,6 +1,6 @@
 <?php
 
-namespace inquid\enhancedgii\migration;
+namespace ilior\enhancedgii\migration;
 
 use Yii;
 use yii\db\Connection;

@@ -1,8 +1,8 @@
 <?php
 
-namespace inquid\enhancedgii\app_template;
+namespace ilior\enhancedgii\app_template;
 
-use inquid\enhancedgii\app_template\component\AppTemplate;
+use ilior\enhancedgii\app_template\component\AppTemplate;
 use Yii;
 use yii\db\Connection;
 use yii\db\Schema;
