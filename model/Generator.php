@@ -36,6 +36,7 @@ class Generator extends BaseGenerator
     /* @var $tableSchema TableSchema */
 
     public $nsModel = 'app\models';
+    public $nsFrontendModel = 'frontend\models';
     public $nameAttribute = 'name, title, username, nombre';
     public $hiddenColumns = 'id, lock';
     public $skippedTables = 'auth_assignment, auth_item, auth_item_child, auth_rule, token,social_account, user, profile, migration';
@@ -76,6 +77,10 @@ class Generator extends BaseGenerator
     public $powerPointExtensions = 'ppt, pptx';
     public $genericFileExtensions = 'txt, sh';
     public $componentClass;
+	
+	public $fileFields = [];
+	
+	public $relationVars = [];
 
     /**
      * @inheritdoc
@@ -99,11 +104,11 @@ class Generator extends BaseGenerator
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['db', 'nsModel', 'tableName', 'modelClass', 'queryNs', 'nsComponent'], 'filter', 'filter' => 'trim'],
+            [['db', 'nsModel', 'nsFrontendModel', 'tableName', 'modelClass', 'queryNs', 'nsComponent'], 'filter', 'filter' => 'trim'],
             [['tableName', 'db'], 'required'],
             [['tableName', 'moduleName'], 'match', 'pattern' => '/^(\w+\.)?([\w\*]+)$/', 'message' => 'Only word characters, and optionally an asterisk and/or a dot are allowed.'],
             [['tableName'], 'validateTableName'],
-            [['nsModel', 'baseModelClass', 'queryNs', 'queryBaseClass'], 'match', 'pattern' => '/^[\w\\\\]+$/', 'message' => 'Only word characters and backslashes are allowed.'],
+            [['nsModel', 'nsFrontendModel', 'baseModelClass', 'queryNs', 'queryBaseClass'], 'match', 'pattern' => '/^[\w\\\\]+$/', 'message' => 'Only word characters and backslashes are allowed.'],
             [['modelClass', 'baseModelClass', 'db'], 'match', 'pattern' => '/^[\w\\\\]*$/', 'message' => 'Only word characters and backslashes are allowed.'],
             [['queryBaseClass', 'queryClass'], 'validateClass', 'params' => ['extends' => ActiveQuery::className()]],
             [['db'], 'validateDb'],
@@ -135,6 +140,7 @@ class Generator extends BaseGenerator
             'queryNs' => 'ActiveQuery Namespace',
             'queryClass' => 'ActiveQuery Class',
             'nsModel' => 'Model Namespace',
+            'nsFrontendModel' => 'Frontend Model Namespace',
             'nsSearchModel' => 'Search Model Namespace',
             'UUIDColumn' => 'UUID Column',
             'viewPath' => 'View Path',
@@ -188,6 +194,7 @@ class Generator extends BaseGenerator
                 You can fill multiple columns, separated by comma (,). You may specify the column name
                 although "Table Name" ends with asterisk, in which case all columns will be generated with hidden field at the forms',
             'nsModel' => 'This is the namespace of the ActiveRecord class to be generated, e.g., <code>app\models</code>',
+            'nsFrontendModel' => 'This is the namespace of the ActiveRecord class to be generated, e.g., <code>app\models</code>',
             'modelClass' => 'This is the name of the Model class to be generated. The class name should not contain
                 the namespace part as it is specified in "Model Namespace". You do not need to specify the class name
                 if "Table Name" ends with asterisk, in which case multiple ActiveRecord classes will be generated.',
@@ -301,6 +308,7 @@ class Generator extends BaseGenerator
 //            'hiddenColumns',
             'nameAttribute',
             'nsModel',
+            'nsFrontendModel',
             'nsSearchModel',
             'baseModelClass',
             'queryNs',
@@ -342,7 +350,7 @@ class Generator extends BaseGenerator
     public function generate()
     {
         $files = [];
-        $relations = $this->generateRelations();
+        $relations = $this->redoRelations($this->generateRelations());
         $db = $this->getDbConnection();
 
         if (isset($this->moduleName) && $this->moduleName) {
@@ -389,6 +397,7 @@ class Generator extends BaseGenerator
             $queryClassName = ($this->generateQuery) ? $this->generateQueryClassName($modelClassName) : false;
             $tableSchema = $db->getTableSchema($tableName);
             $this->modelClass = "{$this->nsModel}\\{$modelClassName}";
+            //$this->modelFrontClass = "{$this->nsFrontendModel}\\{$modelClassName}";
             $this->componentClass = "{$this->nsComponent}\\{$componentClassName}";
 
             $this->tableSchema = $tableSchema;
@@ -404,20 +413,32 @@ class Generator extends BaseGenerator
                 'labels' => $this->generateLabels($tableSchema),
                 'rules' => $this->generateRules($tableSchema),
                 'relations' => isset($relations[$tableName]) ? $relations[$tableName] : [],
+                'relationVars' => isset($this->relationVars[$tableName]) ? $this->relationVars[$tableName] : [],
                 'isTree' => $this->isTree
             ];
             // model :
             $files[] = new CodeFile(
                 Yii::getAlias('@' . str_replace('\\', '/', $this->nsModel)) . '/base/' . $modelClassName . '.php', $this->render('model.php', $params)
             );
+			if ($this->nsFrontendModel) {
+                $files[] = new CodeFile(
+                    Yii::getAlias('@' . str_replace('\\', '/', $this->nsFrontendModel)) . '/base/' . $modelClassName . '.php', $this->render('model-frontend.php', $params)
+                );
+            }
             if (!$this->generateBaseOnly) {
                 $files[] = new CodeFile(
                     Yii::getAlias('@' . str_replace('\\', '/', $this->nsModel)) . '/' . $modelClassName . '.php', $this->render('model-extended.php', $params)
                 );
+				if ($this->nsFrontendModel) {
+					$files[] = new CodeFile(
+						Yii::getAlias('@' . str_replace('\\', '/', $this->nsFrontendModel)) . '/' . $modelClassName . '.php', $this->render('model-frontend-extended.php', $params)
+					);
+				}
             }
-            $files[] = new CodeFile(
+			
+            /* $files[] = new CodeFile(
                 Yii::getAlias('@' . str_replace('\\', '/', $this->nsComponent)) . '/' . $componentClassName . '.php', $this->render('component.php', $params)
-            );
+            ); */
             // query :
             if ($queryClassName) {
                 $params = [
@@ -431,9 +452,11 @@ class Generator extends BaseGenerator
 
             if (strpos($this->tableName, '*') !== false) {
                 $this->modelClass = '';
+               // $this->modelFrontClass = '';
 //                $this->controllerClass = '';
             } else {
                 $this->modelClass = $modelClassName;
+                //$this->modelFrontClass = $modelClassName;
 //                $this->controllerClass = $modelClassName . 'Controller';
             }
         }
@@ -461,6 +484,23 @@ class Generator extends BaseGenerator
 
         return false;
     }
+	
+	protected function redoRelations($relations)
+	{
+		$this->relationVars = [];
+		foreach ($relations as $tableName=>$rels)
+		{
+			$this->relationVars[$tableName] = [];
+			
+			foreach ($rels as $tName => $data)
+			{
+				$this->relationVars[$tableName][$tName] = $data[1].'::className()';
+				$relations[$tableName][$tName][0] = str_replace('\\'.$this->nsModel.'\\'.$data[1].'::className()', '$this->'.$tName.'Class',$data[0]);
+			}
+		}
+		
+		return $relations;
+	}
 
     /**
      * Generates the attribute labels for the specified table.
@@ -510,6 +550,7 @@ class Generator extends BaseGenerator
     {
         $types = [];
         $lengths = [];
+		$this->fileFields = [];
         foreach ($table->columns as $column) {
             if ($column->autoIncrement) {
                 continue;
@@ -545,21 +586,14 @@ class Generator extends BaseGenerator
                 default: // strings
                     if ($column->size > 0) {
                         if ($this->containsAnnotation($column, "@file")) {
-                            $types['file'][] = $column->name . "File";
+                            $types['file'][] = $column->name;
+							$this->fileFields[] = $column->name;
                         } elseif ($this->containsAnnotation($column, "@image")) {
-                            $types['file'][] = $column->name . "Image";
-                        } elseif ($this->containsAnnotation($column, "@video")) {
-                            $types['file'][] = $column->name . "Video";
-                        } elseif ($this->containsAnnotation($column, "@pdf")) {
-                            $types['file'][] = $column->name . "Pdf";
-                        } elseif ($this->containsAnnotation($column, "@excel")) {
-                            $types['file'][] = $column->name . "Excel";
-                        } elseif ($this->containsAnnotation($column, "@word")) {
-                            $types['file'][] = $column->name . "Word";
-                        } elseif ($this->containsAnnotation($column, "@powerpoint")) {
-                            $types['file'][] = $column->name . "Powerpoint";
-                        }
-                        $lengths[$column->size][] = $column->name;
+                            $types['file'][] = $column->name;
+							$this->fileFields[] = $column->name;
+                        } else {
+							$lengths[$column->size][] = $column->name;
+						}
                     } else {
                         $types['string'][] = $column->name;
                     }
@@ -572,7 +606,7 @@ class Generator extends BaseGenerator
                 $rules[] = "[['" . implode("', '", $columns) . "'], '$type','extensions'=>'{$this->genericFileExtensions}']";
             } elseif ($this->containsAnnotation($column, "@image")) {
                 $rules[] = "[['" . implode("', '", $columns) . "'], '$type','extensions'=>'{$this->imageExtensions}']";
-            } elseif ($this->containsAnnotation($column, "@video")) {
+            } /* elseif ($this->containsAnnotation($column, "@video")) {
                 $rules[] = "[['" . implode("', '", $columns) . "'], '$type','extensions'=>'{$this->videoExtensions}']";
             } elseif ($this->containsAnnotation($column, "@pdf")) {
                 $rules[] = "[['" . implode("', '", $columns) . "'], '$type','extensions'=>'{$this->pdfExtensions}']";
@@ -582,7 +616,8 @@ class Generator extends BaseGenerator
                 $rules[] = "[['" . implode("', '", $columns) . "'], '$type','extensions'=>'{$this->wordExtensions}']";
             } elseif ($this->containsAnnotation($column, "@powerpoint")) {
                 $rules[] = "[['" . implode("', '", $columns) . "'], '$type','extensions'=>'{$this->powerPointExtensions}']";
-            } else {
+            }  */
+			else {
                 $rules[] = "[['" . implode("', '", $columns) . "'], '$type']";
             }
         }

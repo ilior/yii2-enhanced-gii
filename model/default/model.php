@@ -70,6 +70,23 @@ class <?= $className ?> extends <?= ($isTree) ? '\kartik\tree\models\Tree' . "\n
         ];
     }
 <?php endif; ?>
+
+<?php if (!empty($relationVars)): ?>
+<?php foreach ($relationVars as $name => $class): ?>
+<?php if (!in_array($name, $generator->skippedRelations)): ?>
+	protected $<?=$name?>Class;
+<?php endif; ?><?php endforeach; ?>
+
+	public function init()
+	{
+		parent::init();
+<?php foreach ($relationVars as $name => $class): ?>
+<?php if (!in_array($name, $generator->skippedRelations)): ?>
+		$this-><?=$name?>Class = \<?= $generator->nsModel ?>\<?=$class?>;
+<?php endif; ?><?php endforeach; ?>
+	}
+<?php endif; ?>
+
 <?php if (!$isTree): ?>
 
     /**
@@ -78,7 +95,8 @@ class <?= $className ?> extends <?= ($isTree) ? '\kartik\tree\models\Tree' . "\n
     */
     public function relationNames()
     {
-        return [<?= "\n            '" . implode("',\n            '", array_keys($relations)) . "'\n        " ?>];
+		<?php $filtered_relations = array_filter(array_keys($relations)); ?>
+        return [<?= "\n            " . (count($filtered_relations)>0?'\''.implode("',\n            '", $filtered_relations).'\'':'') . "\n        " ?>];
     }
 
 <?php endif; ?>
@@ -201,6 +219,18 @@ class <?= $className ?> extends <?= ($isTree) ? '\kartik\tree\models\Tree' . "\n
 <?php endif; ?>
             ],
 <?php endif; ?>
+
+<?php if (count($generator->fileFields) > 0) { 
+	foreach ($generator->fileFields as $fileField) {
+		?>
+			[
+				'class' => '\yiidreamteam\upload\FileUploadBehavior',
+				'attribute' => '<?=$fileField?>',
+				'filePath' => '@frontend/web/uploads/<?=$className?>/[[pk]]_[[attribute_name]].[[extension]]',
+				'fileUrl' => '/uploads/<?=$className?>/[[pk]]_[[attribute_name]].[[extension]]',
+			],
+	<?php }
+	} ?>
         ]<?= ($isTree) ? ")" : "" ?>;
     }
 <?php endif; ?>

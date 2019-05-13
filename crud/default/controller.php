@@ -140,16 +140,16 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
      */
     public function actionView(<?= $actionParams ?>)
     {
+        $model = $this->findModel(<?= $actionParams ?>);
 <?php foreach ($relations as $name => $rel): ?>
 <?php if ($rel[2] && isset($rel[3]) && !in_array($name, $generator->skippedRelations)): ?>
-        $model = $this->findModel(<?= $actionParams ?>);
         $provider<?= $rel[1]?> = new ArrayDataProvider([
             'allModels' => $model-><?= $name ?>,
         ]);
 <?php endif; ?>
 <?php endforeach; ?>
         return $this->render('view', [
-            'model' => $this->findModel(<?= $actionParams ?>),
+            'model' => $model,
 <?php foreach ($relations as $name => $rel): ?>
 <?php if ($rel[2] && isset($rel[3]) && !in_array($name, $generator->skippedRelations)): ?>
             'provider<?= $rel[1]?>' => $provider<?= $rel[1]?>,
@@ -169,14 +169,14 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
          $model = new <?= $modelClass ?>();
          if ($model->loadAll(Yii::$app->request->post()<?= !empty($generator->skippedRelations) ? ", [" . implode(", ", $skippedRelations) . "]" : ""; ?>)){
              <?php
-             foreach ($generator->tableSchema->columns as $column) {
+             /* foreach ($generator->tableSchema->columns as $column) {
                  if ($generator->containsAnnotation($column, "@file")) {
                      echo "\$model->" . $column->name . "File = UploadedFile::getInstance(\$model, '" . $column->name . "File');\n";
 
                  } elseif ($generator->containsAnnotation($column, "@image")) {
                      echo "\$model->" . $column->name . "Image = UploadedFile::getInstance(\$model, '" . $column->name . "Image');\n";
                  }
-             }
+             } */
              ?>
              if($model->saveAll(<?= !empty($generator->skippedRelations) ? "[" . implode(", ", $skippedRelations) . "]" : ""; ?>)) {
                  return $this->redirect(['view', <?= $urlParams ?>]);
@@ -310,7 +310,7 @@ if (count($pks) === 1) {
         if (($model = <?= $modelClass ?>::findOne(<?= $condition ?>)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException(<?= $generator->generateString('La página solicitada no existe.')?>);
+            throw new NotFoundHttpException(<?= $generator->generateString('Страница не найдена.')?>);
         }
     }
 <?php foreach ($relations as $name => $rel): ?>
@@ -332,7 +332,7 @@ if (count($pks) === 1) {
                 $row[] = [];
             return $this->renderAjax('_form<?= $rel[1] ?>', ['row' => $row]);
         } else {
-            throw new NotFoundHttpException(<?= $generator->generateString('La página solicitada no existe.')?>);
+            throw new NotFoundHttpException(<?= $generator->generateString('Страница не найдена.')?>);
         }
     }
 <?php endif; ?>
@@ -399,18 +399,19 @@ if (count($pks) === 1) {
     public function actionImportValidate()
     {
         $personal = new <?= $modelClass ?>();
+		$keyField = $personal->primaryKey()[0];
         $personal->fileExcelImport = UploadedFile::getInstanceByName('fileExcelTest');
-        $personal->fileExcelImport->saveAs('files/<?= $modelClass ?>/tmp_' . $personal->fileExcelImport->baseName . '_' . $personal->id . $personal->fileExcelImport->extension);
-        $path = './files/<?= $modelClass ?>/tmp_' . $personal->fileExcelImport->baseName . '_' . $personal->id . $personal->fileExcelImport->extension;
+        $personal->fileExcelImport->saveAs('files/<?= $modelClass ?>/tmp_' . $personal->fileExcelImport->baseName . '_' . $personal->{$keyField} . $personal->fileExcelImport->extension);
+        $path = './files/<?= $modelClass ?>/tmp_' . $personal->fileExcelImport->baseName . '_' . $personal->{$keyField} . $personal->fileExcelImport->extension;
         $inputFileType = IOFactory::identify($path);
         $reader = IOFactory::createReader($inputFileType);
         $spreadsheet = $reader->load($path);
         $highestRow = $spreadsheet->getActiveSheet()->getHighestRow();
         $data = $spreadsheet->getActiveSheet()->rangeToArray('A1:U' . $highestRow, null, true, false);
         if ($this->extractData($data, true)) {
-            Yii::$app->session->setFlash(Alert::TYPE_SUCCESS, 'La información es correcta y se puede subir al sistema');
+            Yii::$app->session->setFlash(Alert::TYPE_SUCCESS, 'Данные верны и могут быть загружены');
         } else {
-            Yii::$app->session->setFlash(Alert::TYPE_ERROR, 'La información contiene errores favor de revisar');
+            Yii::$app->session->setFlash(Alert::TYPE_ERROR, 'Данные содержат ошибки');
         }
     }
     /**
@@ -421,18 +422,19 @@ if (count($pks) === 1) {
     public function actionImportExcel()
     {
         $personal = new <?= $modelClass ?>();
+		$keyField = $personal->primaryKey()[0];
         $personal->fileExcelImport = UploadedFile::getInstanceByName('fileExcel');
-        $personal->fileExcelImport->saveAs('files/<?= $modelClass ?>/' . $personal->fileExcelImport->baseName . '_' . $personal->id . $personal->fileExcelImport->extension);
-        $path = './files/<?= $modelClass ?>/' . $personal->fileExcelImport->baseName . '_' . $personal->id . $personal->fileExcelImport->extension;
+        $personal->fileExcelImport->saveAs('files/<?= $modelClass ?>/' . $personal->fileExcelImport->baseName . '_' . $personal->{$keyField} . $personal->fileExcelImport->extension);
+        $path = './files/<?= $modelClass ?>/' . $personal->fileExcelImport->baseName . '_' . $personal->{$keyField} . $personal->fileExcelImport->extension;
         $inputFileType = IOFactory::identify($path);
         $reader = IOFactory::createReader($inputFileType);
         $spreadsheet = $reader->load($path);
         $highestRow = $spreadsheet->getActiveSheet()->getHighestRow();
         $data = $spreadsheet->getActiveSheet()->rangeToArray('A1:U' . $highestRow, null, true, false);
         if ($this->extractData($data)) {
-            Yii::$app->session->setFlash(Alert::TYPE_SUCCESS, 'La información fue ingresada al sistema de forma correcta');
+            Yii::$app->session->setFlash(Alert::TYPE_SUCCESS, 'Данные успешно загружены');
         } else {
-            Yii::$app->session->setFlash(Alert::TYPE_ERROR, 'La información contiene errores favor de revisar');
+            Yii::$app->session->setFlash(Alert::TYPE_ERROR, 'Данные содержат ошибки');
         }
     }
     /**

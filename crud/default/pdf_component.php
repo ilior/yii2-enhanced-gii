@@ -38,7 +38,8 @@ class <?= $componentClass ?> extends FPDF
 <?= "public \${$modelClass};\n" ?>
 <?php
 echo "\tpublic function Header(){
-        \t\t\$this->SetTitle('" . $customName . "-' . \$this->" . $modelClass . "->id);
+		\t\t\$keyField = " . $modelClass . "::primaryKey()[0];
+        \t\t\$this->SetTitle('" . $customName . "-' . \$this->" . $modelClass . "->\{\$keyField\});
         \t\t\$this->SetFillColor(\$this->color[0], \$this->color[1], \$this->color[2]);
         \t\t\$this->SetFont('Arial', 'B', 12);
         \t\t\$this->Cell(40, 4, '', 0, 0, 'C');

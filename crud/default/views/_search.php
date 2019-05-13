@@ -29,7 +29,7 @@ use yii\widgets\ActiveForm;
 <?php
 $count = 0;
 foreach ($generator->getColumnNames() as $attribute) {
-    if (!in_array($attribute, $generator->skippedColumns)) {
+    if (!in_array($attribute, $generator->skippedColumns) && !$generator->checkContainsAnnotation($attribute, "@file") && !$generator->checkContainsAnnotation($attribute, "@image")) {
         if (++$count < 6) {
             echo "    <?= " . $generator->generateActiveField($attribute, $fk) . " ?>\n\n";
         } else {
@@ -39,8 +39,8 @@ foreach ($generator->getColumnNames() as $attribute) {
 }
 ?>
     <div class="form-group">
-        <?= "<?= " ?>Html::submitButton(<?= $generator->generateString('Buscar') ?>, ['class' => 'btn btn-primary']) ?>
-        <?= "<?= " ?>Html::resetButton(<?= $generator->generateString('Borrar Busqueda') ?>, ['class' => 'btn btn-default']) ?>
+        <?= "<?= " ?>Html::submitButton(<?= $generator->generateString('Поиск') ?>, ['class' => 'btn btn-primary']) ?>
+        <?= "<?= " ?>Html::resetButton(<?= $generator->generateString('Очистить поиск') ?>, ['class' => 'btn btn-default']) ?>
     </div>
 
     <?= "<?php " ?>ActiveForm::end(); ?>

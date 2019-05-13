@@ -19,6 +19,7 @@ echo $form->field($generator, 'enableI18N')->checkbox();
 echo $form->field($generator, 'messageCategory');
 echo $form->field($generator, 'moduleName');
 echo $form->field($generator, 'nsModel');
+echo $form->field($generator, 'nsFrontendModel');
 echo $form->field($generator, 'modelClass');
 echo $form->field($generator, 'baseModelClass');
 echo $form->field($generator, 'generateQuery')->checkbox();
@@ -61,10 +62,10 @@ echo $form->field($generator, 'excelImport')->checkbox();
 <?= $form->field($generator, 'optimisticLock'); ?>
 <?= "<h4>Timestamp Behaviors</h4>"; ?>
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <?= $form->field($generator, 'createdAt'); ?>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <?= $form->field($generator, 'updatedAt'); ?>
         </div>
         <div class="col-md-6">
@@ -75,10 +76,10 @@ echo $form->field($generator, 'excelImport')->checkbox();
 echo "<h4>Blameable Behaviors</h4>";
 ?>
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <?= $form->field($generator, 'createdBy'); ?>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <?= $form->field($generator, 'updatedBy'); ?>
         </div>
         <div class="col-md-6">
@@ -89,7 +90,7 @@ echo "<h4>Blameable Behaviors</h4>";
 echo "<h4>Soft Delete / Restore</h4>";
 ?>
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <?= $form->field($generator, 'deletedBy'); ?>
         </div>
         <div class="col-md-5">
@@ -100,7 +101,7 @@ echo "<h4>Soft Delete / Restore</h4>";
         </div>
     </div>
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <?= $form->field($generator, 'deletedAt'); ?>
         </div>
         <div class="col-md-5">

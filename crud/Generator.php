@@ -74,6 +74,7 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
     /* PDF */
     public $nsComponent = 'app\components';
     public $componentClass;
+
     /**
      * @inheritdoc
      */
@@ -97,7 +98,7 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['db', 'nsModel', 'viewPath', 'queryNs', 'nsController', 'nsSearchModel', 'tableName', 'modelClass', 'searchModelClass', 'baseControllerClass','nsComponent'], 'filter', 'filter' => 'trim'],
+            [['db', 'nsModel', 'viewPath', 'queryNs', 'nsController', 'nsSearchModel', 'tableName', 'modelClass', 'searchModelClass', 'baseControllerClass', 'nsComponent'], 'filter', 'filter' => 'trim'],
             [['tableName', 'baseControllerClass', 'indexWidgetType', 'db'], 'required'],
             [['tableName', 'moduleName'], 'match', 'pattern' => '/^(\w+\.)?([\w\*]+)$/', 'message' => 'Only word characters, and optionally an asterisk and/or a dot are allowed.'],
             [['tableName'], 'validateTableName'],
@@ -111,7 +112,7 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
 //            [['searchModelClass'], 'validateNewClass'],
             [['indexWidgetType'], 'in', 'range' => ['grid', 'list']],
 //            [['modelClass'], 'validateModelClass'],
-            [['enableI18N', 'generateRelations', 'generateSearchModel', 'pluralize', 'expandable', 'cancelable', 'pdf', 'loggedUserOnly', 'placeHolders','importExcel','useTableComment'], 'boolean'],
+            [['enableI18N', 'generateRelations', 'generateSearchModel', 'pluralize', 'expandable', 'cancelable', 'pdf', 'loggedUserOnly', 'placeHolders', 'importExcel', 'useTableComment'], 'boolean'],
             [['messageCategory'], 'validateMessageCategory', 'skipOnEmpty' => false],
             [['viewPath', 'skippedRelations', 'skippedColumns', 'skippedTables',
                 'controllerClass', 'blameableValue', 'nameAttribute',
@@ -147,7 +148,7 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
             'pdf' => 'PDF Printable View',
             'importExcel' => 'Import From Excel',
             'modelSort' => 'Model Sort Order',
-            'placeHolders'=>'Enable Or Disable Placeholders'
+            'placeHolders' => 'Enable Or Disable Placeholders'
         ]);
     }
 
@@ -192,7 +193,7 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
                 should consider the <code>tablePrefix</code> setting of the DB connection. For example, if the
                 table name is <code>tbl_post</code> and <code>tablePrefix=tbl_</code>, the ActiveRecord class
                 will return the table name as <code>{{%post}}</code>.',
-            'useTableComment'=>'Use the table comment as the title label for views',
+            'useTableComment' => 'Use the table comment as the title label for views',
             'generateSearchModel' => 'This indicates whether the generator should generate search model based on
                 columns it detects in the database.',
             'generateRelations' => 'This indicates whether the generator should generate relations based on
@@ -255,10 +256,10 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
             'queryBaseClass' => 'This is the base class of the new ActiveQuery class. It should be a fully qualified namespaced class name.',
             'saveAsNew' => 'Creates a new model by another data, so user don\'t need to input all field from scratch.',
             'modelSort' => 'Sort order of the grids, ASC or DESC of the ID',
-            'placeHolders'=>'Enable or Disable the place holders in all fields including lists',
-            'generateDocumentation'=>'',
-            'importExcel'=>'Import Data from Excel sheet',
-            'nsComponent'=>'This is the namespace of the Components class to be generated, e.g., <code>app\components</code>'
+            'placeHolders' => 'Enable or Disable the place holders in all fields including lists',
+            'generateDocumentation' => '',
+            'importExcel' => 'Import Data from Excel sheet',
+            'nsComponent' => 'This is the namespace of the Components class to be generated, e.g., <code>app\components</code>'
         ]);
     }
 
@@ -299,7 +300,7 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
      */
     public function requiredTemplates()
     {
-        return ['controller.php','pdf_component.php'];
+        return ['controller.php', 'pdf_component.php'];
     }
 
     /**
@@ -338,7 +339,7 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
             if (strpos($this->tableName, '*') !== false) {
                 $modelClassName = $this->generateClassName($tableName);
                 $controllerClassName = $modelClassName . 'Controller';
-                $pdfComponentClassName = $modelClassName.'PDF';
+                $pdfComponentClassName = $modelClassName . 'PDF';
             } else {
                 $modelClassName = (!empty($this->modelClass)) ? $this->modelClass : Inflector::id2camel($tableName, '_');
                 $controllerClassName = (!empty($this->controllerClass)) ? $this->controllerClass : $modelClassName . 'Controller';
@@ -350,7 +351,7 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
             $this->tableSchema = $tableSchema;
 //            $this->relations = isset($relations[$tableName]) ? $relations[$tableName] : [];
             $this->controllerClass = $this->nsController . '\\' . $controllerClassName;
-            $this->componentClass = $this->nsComponent . '\\'.$pdfComponentClassName;
+            $this->componentClass = $this->nsComponent . '\\' . $pdfComponentClassName;
 
             $isTree = !array_diff(self::getTreeColumns(), $tableSchema->columnNames);
 
@@ -384,10 +385,10 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
                     ])
             );
 
-            if($this->pdf){
-                $files[] =   new CodeFile(
+            if ($this->pdf) {
+                $files[] = new CodeFile(
                     Yii::getAlias('@' . str_replace('\\', '/', $this->nsComponent)) . '/' . $pdfComponentClassName . '.php',
-                    $this->render('pdf_component.php', ['tableNameComment'=>$tableCommentName,'relations' => isset($relations[$tableName]) ? $relations[$tableName] : []])
+                    $this->render('pdf_component.php', ['tableNameComment' => $tableCommentName, 'relations' => isset($relations[$tableName]) ? $relations[$tableName] : []])
                 );
             }
 
@@ -432,7 +433,7 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
                     'tableCommentName' => $tableCommentName
                 ]));
             }
-            
+
             if ($this->importExcel) {
                 $files[] = new CodeFile("$viewPath/import.php", $this->render("views/import.php", [
                     'relations' => isset($relations[$tableName]) ? $relations[$tableName] : [],
@@ -598,13 +599,19 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
      */
     public function generateDetailViewField($attribute, $fk, $tableSchema = null)
     {
+
+
         if (is_null($tableSchema)) {
             $tableSchema = $this->getTableSchema();
         }
+
+        $buff = $this->nsModel . "\\" . ($this->generateClassName($tableSchema->fullName));
+        $labelName = $buff::instance()->getAttributeLabel($attribute);
+
         if (in_array($attribute, $this->hiddenColumns)) {
             return "['attribute' => '$attribute', 'visible' => false],\n";
         }
-        $humanize = Inflector::humanize($attribute, true);
+//        $humanize = Inflector::humanize($attribute, true);
         if ($tableSchema === false || !isset($tableSchema->columns[$attribute])) {
             if (preg_match('/^(password|pass|passwd|passcode)$/i', $attribute)) {
                 return "";
@@ -625,10 +632,32 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
 //            $modelRel = $rel[2] ? lcfirst(Inflector::pluralize($rel[1])) : lcfirst($rel[1]);
             $output = "[
             'attribute' => '$rel[7].$labelCol',
-            'label' => " . $this->generateString(ucwords(Inflector::humanize($rel[5]))) . ",
+            'label' => " . $this->generateString($labelName) . ",
         ],\n";
             return $output;
         } else {
+			if ($format === 'file')
+			{
+				return "[
+					'attribute' => '$attribute',
+					'value' => function (\$model, \$key)
+						{
+							return Html::a('$attribute', \$model->getUploadedFileUrl('$attribute'));
+						}
+				],\n";
+			}	
+			elseif ($format === 'image')
+			{
+				return "[
+					'attribute' => '$attribute',
+					'value' => function (\$model, \$key)
+						{
+							return Html::img(\$model->getUploadedFileUrl('$attribute'));
+						},
+					'format' => 'raw'
+				],\n";
+			}
+			
             return "'$attribute" . ($format === 'text' ? "" : ":" . $format) . "',\n";
         }
     }
@@ -645,6 +674,9 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
         if (is_null($tableSchema)) {
             $tableSchema = $this->getTableSchema();
         }
+
+        $buff = $this->nsModel . "\\" . ($this->generateClassName($tableSchema->fullName));
+        $labelName = $buff::instance()->getAttributeLabel($attribute);
 
         if (in_array($attribute, $this->hiddenColumns)) {
             return "['attribute' => '$attribute', 'visible' => false],\n";
@@ -669,10 +701,33 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
 //            $modelRel = $rel[2] ? lcfirst(Inflector::pluralize($rel[1])) : lcfirst($rel[1]);
             $output = "[
                 'attribute' => '$rel[7].$labelCol',
-                'label' => " . $this->generateString(ucwords(Inflector::humanize($rel[5]))) . "
+                'label' => " . $this->generateString($labelName) . "
             ],\n";
             return $output;
         } else {
+			
+			if ($format === 'file')
+			{
+				return "[
+					'attribute' => '$attribute',
+					'value' => function (\$model, \$key)
+						{
+							return Html::a('$attribute', \$model->getUploadedFileUrl('$attribute'));
+						}
+				],\n";
+			}	
+			elseif ($format === 'image')
+			{
+				return "[
+					'attribute' => '$attribute',
+					'value' => function (\$model, \$key)
+						{
+							return Html::img(\$model->getUploadedFileUrl('$attribute', ['style'=>'max-width:100px,max-height:100px']));
+						},
+					'format' => 'raw'
+				],\n";
+			}
+			
             return "'$attribute" . ($format === 'text' ? "" : ":" . $format) . "',\n";
         }
     }
@@ -689,6 +744,10 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
         if (is_null($tableSchema)) {
             $tableSchema = $this->getTableSchema();
         }
+
+        $buff = $this->nsModel . "\\" . ($this->generateClassName($tableSchema->fullName));
+        $labelName = $buff::instance()->getAttributeLabel($attribute);
+
         if (in_array($attribute, $this->hiddenColumns)) {
             return "['attribute' => '$attribute', 'visible' => false],\n";
         }
@@ -708,13 +767,13 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
         if (array_key_exists($attribute, $fk) && $attribute) {
             $rel = $fk[$attribute];
             $labelCol = $this->getNameAttributeFK($rel[3]);
-            $humanize = Inflector::humanize($rel[3]);
+//            $humanize = Inflector::humanize($rel[3]);
             $id = 'grid-' . Inflector::camel2id(StringHelper::basename($this->searchModelClass)) . '-' . $attribute;
 //            $modelRel = $rel[2] ? lcfirst(Inflector::pluralize($rel[1])) : lcfirst($rel[1]);
             if ($column->allowNull) {
                 $output = "[
                 'attribute' => '$attribute',
-                'label' => " . $this->generateString(ucwords(Inflector::humanize($rel[5]))) . ",
+                'label' => " . $this->generateString($labelName) . ",
                 'value' => function(\$model){
                     if (\$model->$rel[7])
                     {return \$model->$rel[7]->$labelCol;}
@@ -726,13 +785,13 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
                 'filterWidgetOptions' => [
                     'pluginOptions' => ['allowClear' => true],
                 ],
-                'filterInputOptions' => [" . (($this->placeHolders) ? "'placeholder' => '$humanize'," : "") . " 'id' => '$id']
+                'filterInputOptions' => [" . (($this->placeHolders) ? "'placeholder' => '$labelName'," : "") . " 'id' => '$id']
             ],\n";
                 return $output;
             } else {
                 $output = "[
                 'attribute' => '$attribute',
-                'label' => " . $this->generateString(ucwords(Inflector::humanize($rel[5]))) . ",
+                'label' => " . $this->generateString($labelName) . ",
                 'value' => function(\$model){
                     return \$model->$rel[7]->$labelCol;
                 },
@@ -741,11 +800,34 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
                 'filterWidgetOptions' => [
                     'pluginOptions' => ['allowClear' => true],
                 ],
-                'filterInputOptions' => [" . (($this->placeHolders) ? "'placeholder' => '$humanize'," : "") . "'id' => '$id']
+                'filterInputOptions' => [" . (($this->placeHolders) ? "'placeholder' => '$labelName'," : "") . "'id' => '$id']
             ],\n";
                 return $output;
             }
         } else {
+			
+			if ($format === 'file')
+			{
+				return "[
+					'attribute' => '$attribute',
+					'value' => function (\$model, \$key)
+						{
+							return Html::a('$attribute', \$model->getUploadedFileUrl('$attribute'));
+						}
+				],\n";
+			}	
+			elseif ($format === 'image')
+			{
+				return "[
+					'attribute' => '$attribute',
+					'value' => function (\$model, \$key)
+						{
+							return Html::img(\$model->getUploadedFileUrl('$attribute', ['style'=>'max-width:100px,max-height:100px']));
+						},
+					'format' => 'raw'
+				],\n";
+			}
+			
             return "'$attribute" . ($format === 'text' ? "" : ":" . $format) . "',\n";
         }
     }
@@ -757,33 +839,52 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
      */
     public function generateTabularFormField($attribute, $fk, $tableSchema = null)
     {
+
         if (is_null($tableSchema)) {
             $tableSchema = $this->getTableSchema();
+
         }
         if (in_array($attribute, $this->hiddenColumns)) {
             return "\"$attribute\" => ['type' => TabularForm::INPUT_HIDDEN, 'columnOptions' => ['hidden'=>true]]"; //fixes #91 https://github.com/mootensai/yii2-enhanced-gii/issues/91
         }
-        $humanize = Inflector::humanize($attribute, true);
+
+        $buff = $this->nsModel . "\\" . ($this->generateClassName($tableSchema->fullName));
+        $labelName = $buff::instance()->getAttributeLabel($attribute);
+
+        // $humanize = Inflector::humanize($attribute, true);
+
         if ($tableSchema === false || !isset($tableSchema->columns[$attribute])) {
             if (preg_match('/^(password|pass|passwd|passcode)$/i', $attribute)) {
-                return "\"$attribute\" => ['type' => TabularForm::INPUT_PASSWORD]";
+                return "\"$attribute\" => [
+                'label' => '$labelName',
+                'type' => TabularForm::INPUT_PASSWORD]";
             } else {
-                return "\"$attribute\" => ['type' => TabularForm::INPUT_TEXT]";
+                return "\"$attribute\" => [
+                'label' => '$labelName',
+                'type' => TabularForm::INPUT_TEXT]";
             }
         }
         $column = $tableSchema->columns[$attribute];
         if ($column->autoIncrement) {
-            return "'$attribute' => ['type' => TabularForm::INPUT_HIDDEN]";
+            return "'$attribute' => [
+            'label' => '$labelName',
+            'type' => TabularForm::INPUT_HIDDEN]";
         } elseif ($column->phpType === 'boolean' || $column->dbType === 'tinyint(1)') {
-            return "'$attribute' => ['type' => TabularForm::INPUT_CHECKBOX,
+            return "'$attribute' => [
+            'label' => '$labelName',
+            'type' => TabularForm::INPUT_CHECKBOX,
             'options' => [
                 'style' => 'position : relative; margin-top : -9px'
             ]
         ]";
         } elseif ($column->type === 'text' || $column->dbType === 'tinytext') {
-            return "'$attribute' => ['type' => TabularForm::INPUT_TEXTAREA]";
+            return "'$attribute' => [
+            'label' => '$labelName',
+            'type' => TabularForm::INPUT_TEXTAREA]";
         } elseif ($column->dbType === 'date') {
-            return "'$attribute' => ['type' => TabularForm::INPUT_WIDGET,
+            return "'$attribute' => [
+            'label' => '$labelName',
+            'type' => TabularForm::INPUT_WIDGET,
             'widgetClass' => \\kartik\\datecontrol\\DateControl::classname(),
             'options' => [
                 'type' => \\kartik\\datecontrol\\DateControl::FORMAT_DATE,
@@ -791,14 +892,16 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
                 'ajaxConversion' => false,
                 'options' => [
                     'pluginOptions' => ["
-                . (($this->placeHolders) ? "'placeholder' => " . $this->generateString('Seleccione ' . $humanize) . "," : '') .
+                . (($this->placeHolders) ? "'placeholder' => " . $this->generateString('Выберите ' . $labelName) . "," : '') .
                 "'autoclose' => true
                     ]
                 ],
             ]
         ]";
         } elseif ($column->dbType === 'time') {
-            return "'$attribute' => ['type' => TabularForm::INPUT_WIDGET,
+            return "'$attribute' => [
+            'label' => '$labelName',
+            'type' => TabularForm::INPUT_WIDGET,
             'widgetClass' => \\kartik\\datecontrol\\DateControl::classname(),
             'options' => [
                 'type' => \\kartik\\datecontrol\\DateControl::FORMAT_TIME,
@@ -806,14 +909,16 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
                 'ajaxConversion' => true,
                 'options' => [
                     'pluginOptions' => ["
-                . (($this->placeHolders) ? "'placeholder' => " . $this->generateString('Seleccione ' . $humanize) . "," : '') .
+                . (($this->placeHolders) ? "'placeholder' => " . $this->generateString('Выберите ' . $labelName) . "," : '') .
                 "'autoclose' => true
                     ]
                 ]
             ]
         ]";
         } elseif ($column->dbType === 'datetime') {
-            return "'$attribute' => ['type' => TabularForm::INPUT_WIDGET,
+            return "'$attribute' => [
+            'label' => '$labelName',
+            'type' => TabularForm::INPUT_WIDGET,
             'widgetClass' => \\kartik\\datecontrol\\DateControl::classname(),
             'options' => [
                 'type' => \\kartik\\datecontrol\\DateControl::FORMAT_DATETIME,
@@ -821,7 +926,7 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
                 'ajaxConversion' => true,
                 'options' => [
                     'pluginOptions' => ["
-                . (($this->placeHolders) ? "'placeholder' => " . $this->generateString('Seleccione ' . $humanize) . "," : '') .
+                . (($this->placeHolders) ? "'placeholder' => " . $this->generateString('Выберите ' . $labelName) . "," : '') .
                 "'autoclose' => true,
                     ]
                 ],
@@ -834,16 +939,17 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
         } elseif (array_key_exists($column->name, $fk)) {
             $rel = $fk[$column->name];
             $labelCol = $this->getNameAttributeFK($rel[self::REL_TABLE]);
-            $humanize = Inflector::humanize($rel[self::REL_TABLE]);
+            //$humanize = $this->modelClass::instance()->getAttributeLabel($attribute);
+            // Inflector::humanize($rel[self::REL_TABLE]);
 //            $pk = empty($this->tableSchema->primaryKey) ? $this->tableSchema->getColumnNames()[0] : $this->tableSchema->primaryKey[0];
             $fkClassFQ = "\\" . $this->nsModel . "\\" . $rel[self::REL_CLASS];
             $output = "'$attribute' => [
-            'label' => '$humanize',
+            'label' => '$labelName',
             'type' => TabularForm::INPUT_WIDGET,
             'widgetClass' => \\kartik\\widgets\\Select2::className(),
             'options' => [
                 'data' => \\yii\\helpers\\ArrayHelper::map($fkClassFQ::find()->orderBy('$labelCol')->asArray()->all(), '{$rel[self::REL_PRIMARY_KEY]}', '$labelCol'),
-                'options' => [" . (($this->placeHolders) ? "'placeholder' => " . $this->generateString('Seleccione ' . $humanize) : "") . "],
+                'options' => [" . (($this->placeHolders) ? "'placeholder' => " . $this->generateString('Выберите ' . $labelName) : "") . "],
             ],
             'columnOptions' => ['width' => '200px']
         ]";
@@ -859,17 +965,23 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
                 foreach ($column->enumValues as $enumValue) {
                     $dropDownOptions[$enumValue] = Inflector::humanize($enumValue);
                 }
-                return "'$attribute' => ['type' => TabularForm::INPUT_DROPDOWN_LIST,
+                return "'$attribute' => [
+                'label' => '$labelName',
+                'type' => TabularForm::INPUT_DROPDOWN_LIST,
                     'items' => " . preg_replace("/\n\s*/", ' ', VarDumper::export($dropDownOptions)) . ",
                     'options' => [
                         'columnOptions' => ['width' => '185px'],
-                        'options' => [" . (($this->placeHolders) ? "'placeholder' => " . $this->generateString('Seleccione ' . $humanize) : "") . "],
+                        'options' => [" . (($this->placeHolders) ? "'placeholder' => " . $this->generateString('Выберите ' . $labelName) : "") . "],
                     ]
         ]";
             } elseif ($column->phpType !== 'string' || $column->size === null) {
-                return "'$attribute' => ['type' => TabularForm::$input]";
+                return "'$attribute' => [
+                'label' => '$labelName',
+                'type' => TabularForm::$input]";
             } else {
-                return "'$attribute' => ['type' => TabularForm::$input]"; //max length??
+                return "'$attribute' => [
+                'label' => '$labelName',
+                'type' => TabularForm::$input]"; //max length??
             }
         }
     }
@@ -891,12 +1003,16 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
 
         if (is_null($tableSchema)) {
             $tableSchema = $this->getTableSchema();
+
         }
+        $buff = $this->nsModel . "\\" . ($this->generateClassName($tableSchema->fullName));
+        $labelName = $buff::instance()->getAttributeLabel($attribute);
+
         if (in_array($attribute, $this->hiddenColumns)) {
             return "\$form->field($model, '$attribute', ['template' => '{input}'])->textInput(['style' => 'display:none']);";
         }
 
-        $placeholder = $this->placeHolders ? Inflector::humanize($attribute, true) : '';
+        $placeholder = $this->placeHolders ? $labelName : '';
 
         if ($tableSchema === false || !isset($tableSchema->columns[$attribute])) {
             if (preg_match('/^(password|pass|passwd|passcode)$/i', $attribute)) {
@@ -921,7 +1037,7 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
         'ajaxConversion' => true,
         'options' => [
             'pluginOptions' => [
-                'placeholder' => " . $this->generateString('Seleccione ' . $placeholder) . ",
+                'placeholder' => " . $this->generateString('Выберите ' . $placeholder) . ",
                 'autoclose' => true
             ]
         ],
@@ -933,7 +1049,7 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
         'ajaxConversion' => true,
         'options' => [
             'pluginOptions' => [
-                'placeholder' => " . $this->generateString('Seleccione ' . $placeholder) . ",
+                'placeholder' => " . $this->generateString('Выберите ' . $placeholder) . ",
                 'autoclose' => true
             ]
         ]
@@ -945,24 +1061,23 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
         'ajaxConversion' => true,
         'options' => [
             'pluginOptions' => [
-                'placeholder' => " . $this->generateString('Seleccione ' . $placeholder) . ",
+                'placeholder' => " . $this->generateString('Выберите ' . $placeholder) . ",
                 'autoclose' => true,
             ]
         ],
     ]);";
         } elseif ($this->containsAnnotation($column, "@file")) {
-            return "\$form->field($model, '" . $column->name . "File')->fileInput()";
+            return "Html::a('$attribute', \$model->getUploadedFileUrl('$attribute')).'<br>'.\$form->field($model, '" . $column->name . "')->fileInput()";
         } elseif ($this->containsAnnotation($column, "@image")) {
-            return "\$form->field($model, '" . $column->name . "Image')->fileInput()";
+            return "Html::img(\$model->getUploadedFileUrl('$attribute', ['style'=>'max-width:500px,max-height:500px'])).'<br>'.\$form->field($model, '" . $column->name . "')->fileInput()";
         } elseif (array_key_exists($column->name, $fk)) {
             $rel = $fk[$column->name];
             $labelCol = $this->getNameAttributeFK($rel[3]);
-            $humanize = Inflector::humanize($rel[3]);
 //            $pk = empty($this->tableSchema->primaryKey) ? $this->tableSchema->getColumnNames()[0] : $this->tableSchema->primaryKey[0];
             $fkClassFQ = "\\" . $this->nsModel . "\\" . $rel[1];
             $output = "\$form->field($model, '$attribute')->widget(\\kartik\\widgets\\Select2::classname(), [
         'data' => \\yii\\helpers\\ArrayHelper::map($fkClassFQ::find()->orderBy('$rel[4]')->asArray()->all(), '$rel[4]', '$labelCol'),
-        'options' => [" . (($this->placeHolders) ? "'placeholder' => " . $this->generateString('Seleccione ' . $humanize) : "") . "],
+        'options' => [" . (($this->placeHolders) ? "'placeholder' => " . $this->generateString('Выберите ' . $placeholder) : "") . "],
         'pluginOptions' => [
             'allowClear' => true
         ],
@@ -982,9 +1097,9 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
                 return "\$form->field($model, '$attribute')->dropDownList("
                     . preg_replace("/\n\s*/", ' ', VarDumper::export($dropDownOptions)) . ", ['prompt' => '', 'v-model'=>'$attribute'])";
             } elseif ($column->phpType !== 'string' || $column->size === null) {
-                return "\$form->field($model, '$attribute')->$input([".(($this->placeHolders)?"'placeholder' => '$placeholder',":"")."'v-model'=>'$attribute'])";
+                return "\$form->field($model, '$attribute')->$input([" . (($this->placeHolders) ? "'placeholder' => '$placeholder'," : "") . "'v-model'=>'$attribute'])";
             } else {
-                return "\$form->field($model, '$attribute')->$input(['maxlength' => true, ".(($this->placeHolders)?"'placeholder' => '$placeholder',":"")."'v-model'=>'$attribute'])";
+                return "\$form->field($model, '$attribute')->$input(['maxlength' => true, " . (($this->placeHolders) ? "'placeholder' => '$placeholder'," : "") . "'v-model'=>'$attribute'])";
             }
         }
     }
@@ -1000,7 +1115,11 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
             return 'boolean';
         } elseif ($column->dbType === 'tinyint(1)') {
             return 'boolean';
-        } elseif ($column->type === 'text') {
+        } elseif ($this->containsAnnotation($column, "@image"))	{
+			return 'image';
+		} elseif ($this->containsAnnotation($column, "@file"))	{
+			return 'filepath';
+		} elseif ($column->type === 'text') {
             return 'html';
         } elseif (stripos($column->name, 'time') !== false && $column->phpType === 'integer') {
             return 'datetime';
@@ -1229,6 +1348,14 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
         }
         return false;
     }
+	
+	public function checkContainsAnnotation($attribute, $annotation)
+	{
+		$tableSchema = $this->getTableSchema();
+		$column = $tableSchema->columns[$attribute];
+		
+		return $this->containsAnnotation($column, $annotation);
+	}
 
     /**
      * @param $column
@@ -1240,7 +1367,7 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
         if (substr($column->comment, 0, 1) !== "@")
             return false;
         return substr($column->comment, 0, strlen($annotation)) === $annotation;
-		//return preg_match('/(^| )'.$annotation.'( |$)/',$column->comment);
+        //return preg_match('/(^| )'.$annotation.'( |$)/',$column->comment);
     }
 
     /**

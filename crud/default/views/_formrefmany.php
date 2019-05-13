@@ -33,7 +33,11 @@ echo TabularForm::widget([
 <?php foreach ($tableSchema->getColumnNames() as $attribute) :
     $column = $tableSchema->getColumn($attribute);
     if (!in_array($attribute, $generator->skippedColumns) && $attribute != $relations[5]) {
-        echo "        " . $generator->generateTabularFormField($attribute, $fk, $tableSchema) . ",\n";
+		$field = $generator->generateTabularFormField($attribute, $fk, $tableSchema);
+		if ($field)
+		{
+			echo "        " . $field . ",\n";
+		}
     }
 endforeach; ?>
         'del' => [
@@ -42,7 +46,7 @@ endforeach; ?>
             'value' => function($model, $key) {
                 return
                     Html::hiddenInput('Children[' . $key . '][id]', (!empty($model['id'])) ? $model['id'] : "") .
-                    Html::a('<i class="glyphicon glyphicon-trash"></i>', '#', ['title' =>  <?= $generator->generateString('Eliminar') ?>, 'onClick' => 'delRow<?= $relations[$generator::REL_CLASS]; ?>(' . $key . '); return false;', 'id' => '<?= yii\helpers\Inflector::camel2id($relations[$generator::REL_CLASS]) ?>-del-btn']);
+                    Html::a('<i class="glyphicon glyphicon-trash"></i>', '#', ['title' =>  <?= $generator->generateString('Удалить') ?>, 'onClick' => 'delRow<?= $relations[$generator::REL_CLASS]; ?>(' . $key . '); return false;', 'id' => '<?= yii\helpers\Inflector::camel2id($relations[$generator::REL_CLASS]) ?>-del-btn']);
             },
         ],
     ],
@@ -52,7 +56,7 @@ endforeach; ?>
             'type' => GridView::TYPE_DEFAULT,
             'before' => false,
             'footer' => false,
-            'after' => Html::button('<i class="glyphicon glyphicon-plus"></i>' . <?= $generator->generateString('Agregar '.$humanize) ?>, ['type' => 'button', 'class' => 'btn btn-success kv-batch-create', 'onClick' => 'addRow<?= $relations[$generator::REL_CLASS]; ?>()']),
+            'after' => Html::button('<i class="glyphicon glyphicon-plus"></i>' . <?= ($generator->generateString('Добавить  ') .'.'. ($generator->generateString($humanize))) ?>, ['type' => 'button', 'class' => 'btn btn-success kv-batch-create', 'onClick' => 'addRow<?= $relations[$generator::REL_CLASS]; ?>()']),
         ]
     ]
 ]);

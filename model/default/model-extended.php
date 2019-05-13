@@ -28,13 +28,13 @@ class <?= $className ?> extends Base<?= $className . "\n" ?>
 <?php if($generator->excelImport): ?>
     public $fileExcelImport;
 <?php endif; ?>
-<?php foreach ($generator->tableSchema->columns as $column) {
+<?php /* foreach ($generator->tableSchema->columns as $column) {
     if ($generator->containsAnnotation($column, "@file")) {
         echo "public $" . $column->name . "File;\n";
     } elseif ($generator->containsAnnotation($column, "@image")) {
         echo "public $" . $column->name . "Image;\n";
     }
-} ?>
+}  */?>
 <?php if ($generator->generateAttributeHints): ?>
     /**
     * @inheritdoc

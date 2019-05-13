@@ -61,7 +61,7 @@ foreach ($tableSchema->getColumnNames() as $key => $attribute) {
 
     <?php
     if ($generator->hasFile($tableSchema)):
-        echo "<?php " ?>$form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data','class' => 'disable-submit-buttons']]); ?>
+        echo "<?php " ?>$form = ActiveForm::begin(['enableClientValidation' => false, 'options' => ['enctype' => 'multipart/form-data','class' => 'disable-submit-buttons']]); ?>
     <?php else: ?>
         <?= "<?php " ?>$form = ActiveForm::begin(['options' => ['class' => 'disable-submit-buttons']]); ?>
     <?php endif; ?>
@@ -80,7 +80,7 @@ foreach ($tableSchema->getColumnNames() as $key => $attribute) {
             continue;
         }
         if (!in_array($attribute, $generator->skippedColumns)) {
-            echo "<div class='col-md-$bootstrapColWidth'>";
+            echo "<div class='col-md-6'>";
             echo "    \n<?= " . $generator->generateActiveField($attribute, $fk) . " ?>\n\n";
             echo "</div>";
             $rowCount++;
@@ -94,14 +94,14 @@ foreach ($tableSchema->getColumnNames() as $key => $attribute) {
         $relID = Inflector::camel2id($rel[$generator::FK_FIELD_NAME]);
         if ($rel[$generator::REL_IS_MULTIPLE] && isset($rel[$generator::REL_TABLE]) && !in_array($name, $generator->skippedRelations)) {
             $forms .= "        [\n" .
-                "            'label' => '<i class=\"glyphicon glyphicon-book\"></i> ' . Html::encode(" . $generator->generateString($rel[$generator::REL_CLASS]) . "),\n" .
+                "            'label' => '<i class=\"glyphicon glyphicon-book\"></i> ' . Html::encode(" . $generator->generateString(Inflector::camel2words(StringHelper::basename($rel[$generator::REL_CLASS]))) . "),\n" .
                 "            'content' => \$this->render('_form" . $rel[$generator::FK_FIELD_NAME] . "', [\n" .
                 "                'row' => \\yii\\helpers\\ArrayHelper::toArray(\$model->$name),\n" .
                 "            ]),\n" .
                 "        ],\n";
         } else if (isset($rel[$generator::REL_IS_MASTER]) && !$rel[$generator::REL_IS_MASTER]) {
             $forms .= "        [\n" .
-                "            'label' => '<i class=\"glyphicon glyphicon-book\"></i> ' . Html::encode(" . $generator->generateString($rel[$generator::REL_CLASS]) . "),\n" .
+                "            'label' => '<i class=\"glyphicon glyphicon-book\"></i> ' . Html::encode(" . $generator->generateString(Inflector::camel2words(StringHelper::basename($rel[$generator::REL_CLASS]))) . "),\n" .
                 "            'content' => \$this->render('_form" . $rel[$generator::FK_FIELD_NAME] . "', [\n" .
                 "                'form' => \$form,\n" .
                 "                '" . $rel[$generator::REL_CLASS] . "' => is_null(\$model->$name) ? new " . $generator->nsModel . "\\" . $rel[$generator::REL_CLASS] . "() : \$model->$name,\n" .
@@ -130,16 +130,16 @@ foreach ($tableSchema->getColumnNames() as $key => $attribute) {
     <div class="form-group">
         <?php if ($generator->saveAsNew): ?>
             <?= "    <?php if(Yii::\$app->controller->action->id != 'save-as-new'): ?>\n" ?>
-            <?= "        <?= " ?>Html::submitButton($model->isNewRecord ? <?= $generator->generateString('Agregar') ?> : <?= $generator->generateString('Actualizar') ?>, ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','data' => ['disabled-text' => 'Please Wait']]) ?>
+            <?= "        <?= " ?>Html::submitButton($model->isNewRecord ? <?= $generator->generateString('Добавить') ?> : <?= $generator->generateString('Обновление') ?>, ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','data' => ['disabled-text' => 'Please Wait']]) ?>
             <?= "    <?php endif; ?>\n" ?>
             <?= "    <?php if(Yii::\$app->controller->action->id != 'create'): ?>\n" ?>
-            <?= "        <?= " ?>Html::submitButton(<?= $generator->generateString('Duplicar Registro') ?>, ['class' => 'btn btn-info', 'value' => '1', 'name' => '_asnew']) ?>
+            <?= "        <?= " ?>Html::submitButton(<?= $generator->generateString('Дубликат записи') ?>, ['class' => 'btn btn-info', 'value' => '1', 'name' => '_asnew']) ?>
             <?= "    <?php endif; ?>\n" ?>
         <?php else: ?>
-            <?= "        <?= " ?>Html::submitButton($model->isNewRecord ? <?= $generator->generateString('Agregar') ?> : <?= $generator->generateString('Actualizar') ?>, ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','data' => ['disabled-text' => 'Please Wait']]) ?>
+            <?= "        <?= " ?>Html::submitButton($model->isNewRecord ? <?= $generator->generateString('Добавить') ?> : <?= $generator->generateString('Обновление') ?>, ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','data' => ['disabled-text' => 'Please Wait']]) ?>
         <?php endif; ?>
         <?php if ($generator->cancelable): ?>
-            <?= "<?= " ?>Html::a(Yii::t('app', 'Cancelar'), Yii::$app->request->referrer , ['class'=> 'btn btn-danger']) ?>
+            <?= "<?= " ?>Html::a(Yii::t('app', 'Отменить'), Yii::$app->request->referrer , ['class'=> 'btn btn-danger']) ?>
         <?php endif; ?>
     </div>
 

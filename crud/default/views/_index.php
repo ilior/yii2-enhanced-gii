@@ -16,7 +16,7 @@ use yii\widgets\DetailView;
     </div>
     <div class="<?= ($generator->saveAsNew) ? "col-sm-5" : "col-sm-3";?>" style="margin-top: 15px">
 <?php if($generator->pdf): ?>
-        <?= "<?= " ?>Html::a('<i class="fa glyphicon glyphicon-hand-up"></i> ' . <?= $generator->generateString('Generar PDF')?>,
+        <?= "<?= " ?>Html::a('<i class="fa glyphicon glyphicon-hand-up"></i> ' . <?= $generator->generateString('Создать PDF')?>,
             ['pdf', <?= $urlParams ?>],
             [
                 'class' => 'btn btn-danger',
@@ -27,7 +27,7 @@ use yii\widgets\DetailView;
         )?>
 <?php endif; ?>
 <?php if($generator->saveAsNew): ?>
-        <?= "<?= " ?>Html::a('<i class="fa glyphicon glyphicon-hand-up"></i> ' . <?= $generator->generateString('Duplicar Registro')?>,
+        <?= "<?= " ?>Html::a('<i class="fa glyphicon glyphicon-hand-up"></i> ' . <?= $generator->generateString('Дубликат записи')?>,
             ['save-as-new', <?= $urlParams ?>], ['class' => 'btn btn-info'])?>
 <?php endif; ?>
         <?= "<?=" ?> Html::a(Yii::t('app', 'Update'), ['update', <?= $urlParams ?>], ['class' => 'btn btn-primary']) ?>

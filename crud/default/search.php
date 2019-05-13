@@ -69,7 +69,8 @@ use <?= ltrim($generator->nsModel . '\\' . $modelClass, '\\') . (isset($modelAli
             'query' => $query,
         ]);
 
-        $query->orderBy(['id' => <?= $generator->modelSort ?>]);
+		$keyField = <?= isset($modelAlias) ? $modelAlias : $modelClass ?>::primaryKey()[0];
+        $query->orderBy([$keyField => <?= $generator->modelSort ?>]);
 
         $this->load($params);
 
