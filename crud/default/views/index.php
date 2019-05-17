@@ -45,7 +45,7 @@ $this->registerJs($search);
     <?php endif; ?>
 
     <p>
-        <?= "<?= " ?>Html::a(<?= ($generator->generateString('Создать  ') .'.'. ($generator->generateString(Inflector::camel2words($baseModelClass)))) ?>,
+        <?= "<?= " ?>Html::a(<?= ($generator->generateString('Создать новый')) ?>,
         ['create'], ['class' => 'btn btn-success']) ?>
         <?php if (!empty($generator->searchModelClass)): ?>
             <?= "<?= " ?>Html::a(<?= $generator->generateString('Расширенный поиск') ?>, '#', ['class' => 'btn btn-info search-button']) ?>

@@ -97,6 +97,7 @@ foreach ($tableSchema->getColumnNames() as $key => $attribute) {
                 "            'label' => '<i class=\"glyphicon glyphicon-book\"></i> ' . Html::encode(" . $generator->generateString(Inflector::camel2words(StringHelper::basename($rel[$generator::REL_CLASS]))) . "),\n" .
                 "            'content' => \$this->render('_form" . $rel[$generator::FK_FIELD_NAME] . "', [\n" .
                 "                'row' => \\yii\\helpers\\ArrayHelper::toArray(\$model->$name),\n" .
+				"                'parent' => \$model,\n" .
                 "            ]),\n" .
                 "        ],\n";
         } else if (isset($rel[$generator::REL_IS_MASTER]) && !$rel[$generator::REL_IS_MASTER]) {
@@ -130,13 +131,13 @@ foreach ($tableSchema->getColumnNames() as $key => $attribute) {
     <div class="form-group">
         <?php if ($generator->saveAsNew): ?>
             <?= "    <?php if(Yii::\$app->controller->action->id != 'save-as-new'): ?>\n" ?>
-            <?= "        <?= " ?>Html::submitButton($model->isNewRecord ? <?= $generator->generateString('Добавить') ?> : <?= $generator->generateString('Обновление') ?>, ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','data' => ['disabled-text' => 'Please Wait']]) ?>
+            <?= "        <?= " ?>Html::submitButton($model->isNewRecord ? <?= $generator->generateString('Добавить') ?> : <?= $generator->generateString('Сохранить') ?>, ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','data' => ['disabled-text' => 'Пожалуйста, подождите']]) ?>
             <?= "    <?php endif; ?>\n" ?>
             <?= "    <?php if(Yii::\$app->controller->action->id != 'create'): ?>\n" ?>
-            <?= "        <?= " ?>Html::submitButton(<?= $generator->generateString('Дубликат записи') ?>, ['class' => 'btn btn-info', 'value' => '1', 'name' => '_asnew']) ?>
+            <?= "        <?= " ?>Html::submitButton(<?= $generator->generateString('Сохранить как копию') ?>, ['class' => 'btn btn-info', 'value' => '1', 'name' => '_asnew']) ?>
             <?= "    <?php endif; ?>\n" ?>
         <?php else: ?>
-            <?= "        <?= " ?>Html::submitButton($model->isNewRecord ? <?= $generator->generateString('Добавить') ?> : <?= $generator->generateString('Обновление') ?>, ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','data' => ['disabled-text' => 'Please Wait']]) ?>
+            <?= "        <?= " ?>Html::submitButton($model->isNewRecord ? <?= $generator->generateString('Добавить') ?> : <?= $generator->generateString('Сохранить') ?>, ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','data' => ['disabled-text' => 'Пожалуйста, подождите']]) ?>
         <?php endif; ?>
         <?php if ($generator->cancelable): ?>
             <?= "<?= " ?>Html::a(Yii::t('app', 'Отменить'), Yii::$app->request->referrer , ['class'=> 'btn btn-danger']) ?>

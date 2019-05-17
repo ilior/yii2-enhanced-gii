@@ -47,10 +47,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 ?>
             <?php endif; ?>
             <?php if ($generator->saveAsNew): ?>
-                <?= "            <?= Html::a(" . $generator->generateString('Дубликат записи') . ", ['save-as-new', " . $generator->generateUrlParams() . "], ['class' => 'btn btn-info']) ?>" ?>
+                <?= "            <?= Html::a(" . $generator->generateString('Создать копию') . ", ['save-as-new', " . $generator->generateUrlParams() . "], ['class' => 'btn btn-info']) ?>" ?>
             <?php endif; ?>
             <?= "
-            <?= Html::a(" . $generator->generateString('Обновление') . ", ['update', " . $generator->generateUrlParams() . "], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a(" . $generator->generateString('Редактировать') . ", ['update', " . $generator->generateUrlParams() . "], ['class' => 'btn btn-primary']) ?>
             <?= Html::a(" . $generator->generateString('Удаление') . ", ['delete', " . $generator->generateUrlParams() . "], [
                 'class' => 'btn btn-danger',
                 'data' => [
@@ -142,7 +142,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		{
 		<?= "?>" ?>
             <div class="row">
-                <h4><?= $rel[1] ?><?= "<?= " ?>' '. Html::encode($this->title) ?></h4>
+                <h4><?= "<?= " ?>Yii::t('app', '<?= $rel[1] ?>').' '. Html::encode($this->title) ?></h4>
             </div>
             <?= "<?php \n" ?>
             $gridColumn<?= $rel[1] ?> = [
