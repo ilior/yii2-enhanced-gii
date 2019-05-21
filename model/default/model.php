@@ -223,7 +223,7 @@ class <?= $className ?> extends <?= ($isTree) ? '\kartik\tree\models\Tree' . "\n
 <?php if (count($generator->fileFields) > 0) { 
 	foreach ($generator->fileFields as $fileField) {
 		?>
-			[
+			'fileupload' => [
 				'class' => '\yiidreamteam\upload\FileUploadBehavior',
 				'attribute' => '<?=$fileField?>',
 				'filePath' => '@frontend/web/uploads/<?=$className?>/[[pk]]_[[attribute_name]].[[extension]]',
