@@ -722,7 +722,7 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
 					'attribute' => '$attribute',
 					'value' => function (\$model, \$key)
 						{
-							return Html::img(\$model->getUploadedFileUrl('$attribute', ['style'=>'max-width:100px,max-height:100px']));
+							return Html::img(\$model->getUploadedFileUrl('$attribute'), ['style'=>'max-width:100px,max-height:100px']);
 						},
 					'format' => 'raw'
 				],\n";
@@ -822,7 +822,7 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
 					'attribute' => '$attribute',
 					'value' => function (\$model, \$key)
 						{
-							return Html::img(\$model->getUploadedFileUrl('$attribute', ['style'=>'max-width:100px,max-height:100px']));
+							return Html::img(\$model->getUploadedFileUrl('$attribute'), ['style'=>'max-width:100px,max-height:100px']);
 						},
 					'format' => 'raw'
 				],\n";
@@ -1069,7 +1069,7 @@ class Generator extends \ilior\enhancedgii\BaseGenerator
         } elseif ($this->containsAnnotation($column, "@file")) {
             return "Html::a('$attribute', \$model->getUploadedFileUrl('$attribute')).'<br>'.\$form->field($model, '" . $column->name . "')->fileInput()";
         } elseif ($this->containsAnnotation($column, "@image")) {
-            return "Html::img(\$model->getUploadedFileUrl('$attribute', ['style'=>'max-width:500px,max-height:500px'])).'<br>'.\$form->field($model, '" . $column->name . "')->fileInput()";
+            return "Html::img(\$model->getUploadedFileUrl('$attribute'), ['style'=>'max-width:500px,max-height:500px']).'<br>'.\$form->field($model, '" . $column->name . "')->fileInput()";
         } elseif (array_key_exists($column->name, $fk)) {
             $rel = $fk[$column->name];
             $labelCol = $this->getNameAttributeFK($rel[3]);

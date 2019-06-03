@@ -7,12 +7,15 @@ use yii\helpers\StringHelper;
 
 echo "
 <?php
-use dominus77\sweetalert2\Alert;";
+";
 
 echo "/* @var \$this \yii\web\View */
 \$this->title = 'Импорт'; ?>"
 ?>
-<?= "<?= Alert::widget(['useSessionFlash' => true]); ?>" ?>
+<div class="row">
+	<div id="error-container" class="col-sm-12 ">
+	</div>
+</div>
 <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-create">
     <div class="box box-primary">
         <div class="box-header with-border">
@@ -28,7 +31,7 @@ echo "/* @var \$this \yii\web\View */
                     </ul>
                 </div>
                 <div class="col-sm-4">
-                    <h1>Подтвердить формат</h1>
+                    <h1>Проверить файл</h1>
                     <?= "<?= \kartik\\file\FileInput::widget([
                         'name' => 'fileExcelTest',
                         'id' => 'fileExcelTest',
@@ -36,10 +39,11 @@ echo "/* @var \$this \yii\web\View */
                             //'filebatchuploadcomplete' => 'function() {location.reload();}',
                         ],
                         'pluginOptions' => [
+							'elErrorContainer' => '#error-container',
                             'showPreview' => false,
                             'showCaption' => false,
                             'browseIcon' => '<i class=\"glyphicon glyphicon-file\"></i> ',
-                            'browseLabel' => 'Importar desde excel',
+                            'browseLabel' => 'Выбрать файл',
                             'elCaptionText' => '#customCaption',
                             'uploadUrl' => \yii\helpers\Url::to(['import-validate']),
                             'allowedFileTypes' => 'object',
@@ -48,7 +52,7 @@ echo "/* @var \$this \yii\web\View */
                     ]); ?>"?>
                 </div>
                 <div class="col-sm-4">
-                    <h1>Формат импорта</h1>
+                    <h1>Импортировать данные</h1>
                     <?= "<?= \kartik\\file\FileInput::widget([
                         'name' => 'fileExcel',
                         'id' => 'fileExcel',
@@ -56,10 +60,11 @@ echo "/* @var \$this \yii\web\View */
                             //'filebatchuploadcomplete' => 'function() {location.reload();}',
                         ],
                         'pluginOptions' => [
+							'elErrorContainer' => '#error-container',
                             'showPreview' => false,
                             'showCaption' => false,
                             'browseIcon' => '<i class=\"glyphicon glyphicon-file\"></i> ',
-                            'browseLabel' => 'Importar desde excel',
+                            'browseLabel' => 'Выбрать файл',
                             'elCaptionText' => '#customCaption',
                             'uploadUrl' => \yii\helpers\Url::to(['import-excel']),
                             'allowedFileTypes' => 'object',
